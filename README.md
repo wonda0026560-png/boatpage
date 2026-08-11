@@ -27,24 +27,34 @@ npm run dev
 | `/about` | 기업소개 |
 | `/faq` | 자주 묻는 질문 |
 
-## 배포
+## 배포 (Railway)
 
-`main` 브랜치에 푸시하면 GitHub Actions가 빌드해 GitHub Pages로 올린다
-(`.github/workflows/deploy.yml`).
+GitHub 저장소를 Railway 프로젝트에 연결해두면 `main` 에 푸시할 때마다
+자동으로 빌드·재배포된다. 설정은 `railway.json` 에 있다.
 
-**최초 1회 설정이 필요하다.** 저장소 Settings → Pages → Source 를
-**GitHub Actions** 로 바꿔야 워크플로가 동작한다.
+| 단계 | 명령 |
+| --- | --- |
+| 빌드 | `npm run build` → `out/` |
+| 실행 | `npm start` |
 
-하위 경로(`/boatpage/`)로 서비스되므로 빌드 시 `BASE_PATH` 를 넘긴다.
-`vite.config.ts` 의 `base` 와 `App.tsx` 의 `BrowserRouter basename` 이
-모두 이 값을 읽으므로 여기만 바꾸면 경로 전체가 따라간다.
+`npm start` 는 `serve -s out` 으로 정적 파일을 띄운다.
+
+- `-s` 옵션이 SPA 폴백을 처리한다. 이게 없으면 `/models` 같은 주소로
+  직접 들어왔을 때 404 가 난다. 라우팅이 클라이언트에서만 존재하기 때문이다.
+- 포트는 Railway 가 주입하는 `PORT` 를 그대로 쓰고 `0.0.0.0` 에 바인딩한다.
+  `localhost` 에 바인딩하면 컨테이너 밖에서 접속되지 않는다.
+
+### 경로 설정
+
+Railway 는 루트(`/`)로 서비스하므로 기본값을 그대로 쓰면 된다.
+GitHub Pages 처럼 하위 경로로 올릴 때만 `BASE_PATH` 를 넘긴다.
 
 ```bash
-BASE_PATH=/boatpage/ npm run build
+BASE_PATH=/하위경로/ npm run build
 ```
 
-커스텀 도메인을 붙이거나 루트로 서비스한다면 워크플로의 `BASE_PATH` 를
-`/` 로 바꾸면 된다.
+`vite.config.ts` 의 `base` 와 `App.tsx` 의 `BrowserRouter basename` 이
+모두 이 값을 읽으므로 여기만 바꾸면 경로 전체가 따라간다.
 
 ## 아직 채워야 할 것
 
