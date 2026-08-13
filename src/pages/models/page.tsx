@@ -6,7 +6,7 @@ import Cursor from '../../components/layout/Cursor';
 import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import { useSmoothScroll } from '../../hooks/useSmoothScroll';
-import { BOAT_MODELS } from '../../data/models';
+import { MODEL_SECTIONS, getModelsByCategory } from '../../data/models';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -61,12 +61,24 @@ export default function ModelsPage() {
           </h1>
           <p className="models-head__body">
             원다마린산업은 합성수지(FRP) 선박과 레저용 보트를 직접 설계하고 건조합니다.
-            아래 세 가지가 기본 라인업이며, 선실 구성과 의장은 주문에 맞춰 조정합니다.
+            1994년부터 이어 온 어선 건조 기술을 바탕으로, 레저보트와 어선을 함께 만듭니다.
           </p>
         </header>
 
-        <div className="model-list">
-          {BOAT_MODELS.map((model) => {
+        {MODEL_SECTIONS.map((section) => {
+          const models = getModelsByCategory(section.category);
+          // 모델이 없는 구획은 아예 그리지 않는다
+          if (models.length === 0) return null;
+
+          return (
+            <section className="model-section" key={section.category}>
+              <header className="model-section__head">
+                <h2 className="model-section__title">{section.label}</h2>
+                <p className="model-section__desc">{section.description}</p>
+              </header>
+
+              <div className="model-list">
+                {models.map((model) => {
             // 개발 중인 모델은 상세 페이지가 없으므로 클릭 대상으로 만들지 않는다.
             const isUpcoming = Boolean(model.upcoming);
             return (
@@ -113,9 +125,12 @@ export default function ModelsPage() {
                   </>
                 )}
               </article>
-            );
-          })}
-        </div>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })}
 
         <p className="models-note">
           제원은 개선을 위해 예고 없이 변경될 수 있습니다. 정확한 사양과 견적은 문의해 주세요.

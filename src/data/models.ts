@@ -16,7 +16,11 @@ export interface BoatSpec {
   value: string;
 }
 
+/** 레저보트(WLS 시리즈)와 어선(어장관리선 등)을 목록에서 나눠 보여준다. */
+export type BoatCategory = 'leisure' | 'fishing';
+
 export interface BoatModel {
+  category: BoatCategory;
   slug: string;
   name: string;
   /** WLS560-X의 (eXtension)처럼 이름 뒤에 작게 붙는 부기 */
@@ -53,6 +57,7 @@ const HULL_COLORS: BoatColor[] = [
 
 export const BOAT_MODELS: BoatModel[] = [
   {
+    category: 'leisure',
     slug: 'wls560',
     name: 'WLS560',
     index: '01',
@@ -71,6 +76,7 @@ export const BOAT_MODELS: BoatModel[] = [
     hull: { beamRatio: 0.407, flare: 1.35, hardTop: false },
   },
   {
+    category: 'leisure',
     slug: 'wls560-x',
     name: 'WLS560-X',
     suffix: '(eXtension)',
@@ -85,6 +91,7 @@ export const BOAT_MODELS: BoatModel[] = [
     hull: { beamRatio: 0.407, flare: 1.35, hardTop: true },
   },
   {
+    category: 'leisure',
     slug: 'wls730',
     name: 'WLS730',
     index: '03',
@@ -97,6 +104,36 @@ export const BOAT_MODELS: BoatModel[] = [
     hull: { beamRatio: 0.39, flare: 1.3, hardTop: true },
   },
 ];
+
+/**
+ * 목록 페이지의 구획. 순서대로 렌더된다.
+ *
+ * 해당 카테고리에 모델이 하나도 없으면 그 구획은 그리지 않는다.
+ * 빈 제목만 덩그러니 남는 것보다 아예 없는 편이 낫고,
+ * 어선 데이터가 채워지는 즉시 자동으로 나타난다.
+ */
+export const MODEL_SECTIONS: {
+  category: BoatCategory;
+  label: string;
+  description: string;
+}[] = [
+  {
+    category: 'leisure',
+    label: '레저보트',
+    description:
+      '낚시와 레저를 위한 WLS 시리즈입니다. 선실 구성과 의장은 주문에 맞춰 조정합니다.',
+  },
+  {
+    category: 'fishing',
+    label: '어선',
+    description:
+      '1994년부터 이어 온 어선 건조 라인입니다. 어장 여건과 조업 방식에 맞춰 제작합니다.',
+  },
+];
+
+export function getModelsByCategory(category: BoatCategory) {
+  return BOAT_MODELS.filter((m) => m.category === category);
+}
 
 /** 상세 페이지가 있는 모델만. 개발 중인 모델은 제외한다. */
 export const VIEWABLE_MODELS = BOAT_MODELS.filter((m) => !m.upcoming);
