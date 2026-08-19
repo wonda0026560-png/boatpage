@@ -2,9 +2,11 @@ import { useLayoutEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import HeroCanvas from './HeroCanvas';
+// 실제 건조한 7.93톤급 어장관리선(크레인 사양). 로컬 자산이라
+// 외부 이미지 서비스의 CORS 차단으로 WebGL 텍스처가 깨지던 문제도 사라진다.
+import heroImage from '../../../assets/site/hero-sunset.jpg';
 
-const HERO_IMAGE =
-  'https://readdy.ai/api/search-image?query=Ultra-realistic%20cinematic%20aerial%20drone%20photograph%20of%20a%20secluded%20emerald%20green%20turquoise%20Caribbean%20cove%20along%20the%20northern%20coast%20of%20Puerto%20Rico%2C%20soft%20warm%20late%20afternoon%20golden%20hour%20light%2C%20pale%20volcanic%20sand%20crescent%20beach%2C%20translucent%20jade%20water%20with%20subtle%20wave%20crests%2C%20lush%20tropical%20jungle%20cliffs%20framing%20the%20cove%2C%20editorial%20luxury%20travel%20magazine%20style%2C%20high%20detail%2C%20muted%20natural%20tones%2C%20soft%20mist%2C%20minimalism&width=2600&height=1600&seq=hero-sanjuan-aerial-01&orientation=landscape';
+const HERO_IMAGE = heroImage;
 
 export default function Hero() {
   const rootRef = useRef<HTMLElement>(null);
@@ -71,7 +73,7 @@ export default function Hero() {
       <img
         className="hero__fallback"
         src={HERO_IMAGE}
-        alt="완도 앞바다를 항주하는 원다마린산업 레저보트"
+        alt="노을 무렵 항구에 계류한 원다마린산업 7.93톤급 어장관리선"
       />
       <div className="hero__overlay" />
 

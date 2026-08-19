@@ -2,9 +2,28 @@
  * 원다마린산업 모델 라인업.
  *
  * 여기 있는 값은 회사에서 제공한 실제 정보다. 없는 항목은 비워둔다 —
- * 임의로 채우면 영업 현장에서 사고가 난다. 인승·엔진·연료탱크·속력·가격은
- * 아직 받지 못했으므로 화면에 표시하지 않는다.
+ * 임의로 채우면 영업 현장에서 사고가 난다.
+ *
+ * 어선(어장관리선)은 회사가 제공한 실측 사진과 파일명의 톤수 표기를
+ * 그대로 옮긴 것이다. 전장·정원 등 나머지 제원은 아직 받지 못했다.
  */
+
+import fm075 from '../assets/boats/fm-075.jpg';
+import fm089 from '../assets/boats/fm-089.jpg';
+import fm120 from '../assets/boats/fm-120.jpg';
+import fm140 from '../assets/boats/fm-140.jpg';
+import fm178 from '../assets/boats/fm-178.jpg';
+import fm190 from '../assets/boats/fm-190.jpg';
+import fm793 from '../assets/boats/fm-793.jpg';
+import fm977 from '../assets/boats/fm-977.jpg';
+import fm075t from '../assets/boats/thumbs/fm-075.jpg';
+import fm089t from '../assets/boats/thumbs/fm-089.jpg';
+import fm120t from '../assets/boats/thumbs/fm-120.jpg';
+import fm140t from '../assets/boats/thumbs/fm-140.jpg';
+import fm178t from '../assets/boats/thumbs/fm-178.jpg';
+import fm190t from '../assets/boats/thumbs/fm-190.jpg';
+import fm793t from '../assets/boats/thumbs/fm-793.jpg';
+import fm977t from '../assets/boats/thumbs/fm-977.jpg';
 
 export interface BoatColor {
   name: string;
@@ -30,17 +49,25 @@ export interface BoatModel {
   type: string;
   tagline: string;
   description: string;
-  /** 카드에 크게 노출할 대표 수치. 없으면 표시하지 않는다. */
-  lengthLabel?: string;
+  /** 목록·상세 헤더에 크게 노출할 대표 수치. 레저보트는 전장, 어선은 톤수. */
+  keyFigure?: BoatSpec;
   specs: BoatSpec[];
+  /** 색상 선택 UI. 비어 있으면 그 구획 자체를 그리지 않는다. */
   colors: BoatColor[];
   /** 개발 중인 모델. 상세 페이지를 만들지 않고 목록에만 노출한다. */
   upcoming?: boolean;
   /**
-   * 3D 선체 생성 파라미터.
+   * 실물 사진. 있으면 상세 페이지에서 3D 뷰어 대신 사진을 보여주고,
+   * 목록 행에 썸네일이 붙는다.
+   */
+  photo?: string;
+  thumb?: string;
+  photoAlt?: string;
+  /**
+   * 3D 선체 생성 파라미터. 사진이 없는 모델(레저보트)에만 쓴다.
    * beamRatio는 실제 전폭 ÷ 전장이다. WLS560 기준 2.30 / 5.65 = 0.407.
    */
-  hull: {
+  hull?: {
     beamRatio: number;
     flare: number;
     hardTop: boolean;
@@ -55,6 +82,36 @@ const HULL_COLORS: BoatColor[] = [
   { name: '포레스트', hex: '#2E4A3C' },
 ];
 
+/** 어장관리선 공통 설명. 톤수별 개별 문구를 받으면 각 모델로 옮긴다. */
+const FISHING_DESCRIPTION =
+  '1994년부터 이어 온 어장관리선 건조 라인입니다. 어장 여건과 조업 방식에 맞춰 선형과 의장을 조정해 제작하며, 사진은 실제 건조·인도된 선박입니다.';
+
+function fishingModel(args: {
+  slug: string;
+  index: string;
+  ton: string;
+  outboard?: boolean;
+  photo: string;
+  thumb: string;
+  photoAlt: string;
+}): BoatModel {
+  return {
+    category: 'fishing',
+    slug: args.slug,
+    name: `${args.ton}톤급`,
+    index: args.index,
+    type: args.outboard ? '어장관리선 · 선외기' : '어장관리선',
+    tagline: '어장 여건에 맞춘 주문 건조',
+    description: FISHING_DESCRIPTION,
+    keyFigure: { label: '톤수', value: `${args.ton}톤급` },
+    specs: [{ label: '톤수', value: `${args.ton}톤급` }],
+    colors: [],
+    photo: args.photo,
+    thumb: args.thumb,
+    photoAlt: args.photoAlt,
+  };
+}
+
 export const BOAT_MODELS: BoatModel[] = [
   {
     category: 'leisure',
@@ -65,7 +122,7 @@ export const BOAT_MODELS: BoatModel[] = [
     tagline: '삼동선의 장점을 결합한 5M급 선형',
     description:
       'WLS560 모델은 한국 소비자의 요구사항에 최적화된 5M급 낚시용 레저보트를 개발목표로 추구한 모델입니다. V형 모노헐 양쪽에 너클파트를 추가하여 단동선이지만, 삼동선의 장점을 결합한 선형입니다. 부상능력과 부력, 롤링에 유리하며, 대형어창의 탑재와 함께 낚시공간활용성이 뛰어납니다.',
-    lengthLabel: '5.65 m',
+    keyFigure: { label: '전장', value: '5.65 m' },
     specs: [
       { label: '장', value: '5.65 m' },
       { label: '폭', value: '2.30 m' },
@@ -103,14 +160,81 @@ export const BOAT_MODELS: BoatModel[] = [
     upcoming: true,
     hull: { beamRatio: 0.39, flare: 1.3, hardTop: true },
   },
+
+  // ---- 어장관리선 (톤수 오름차순) ----
+  fishingModel({
+    slug: 'fm-075',
+    index: '01',
+    ton: '0.75',
+    photo: fm075,
+    thumb: fm075t,
+    photoAlt: '계류 중인 0.75톤급 어장관리선',
+  }),
+  fishingModel({
+    slug: 'fm-089',
+    index: '02',
+    ton: '0.89',
+    photo: fm089,
+    thumb: fm089t,
+    photoAlt: '육상 거치된 0.89톤급 어장관리선',
+  }),
+  fishingModel({
+    slug: 'fm-120',
+    index: '03',
+    ton: '1.20',
+    photo: fm120,
+    thumb: fm120t,
+    photoAlt: '가두리 양식장 옆에 계류한 1.20톤급 어장관리선',
+  }),
+  fishingModel({
+    slug: 'fm-140',
+    index: '04',
+    ton: '1.40',
+    photo: fm140,
+    thumb: fm140t,
+    photoAlt: '항구에 계류한 1.40톤급 어장관리선',
+  }),
+  fishingModel({
+    slug: 'fm-178',
+    index: '05',
+    ton: '1.78',
+    photo: fm178,
+    thumb: fm178t,
+    photoAlt: '운항 중인 1.78톤급 어장관리선',
+  }),
+  fishingModel({
+    slug: 'fm-190',
+    index: '06',
+    ton: '1.90',
+    photo: fm190,
+    thumb: fm190t,
+    photoAlt: '계류 중인 1.90톤급 어장관리선',
+  }),
+  fishingModel({
+    slug: 'fm-793',
+    index: '07',
+    ton: '7.93',
+    outboard: true,
+    photo: fm793,
+    thumb: fm793t,
+    photoAlt: '크레인을 장착한 7.93톤급 어장관리선',
+  }),
+  fishingModel({
+    slug: 'fm-977',
+    index: '08',
+    ton: '9.77',
+    outboard: true,
+    photo: fm977,
+    thumb: fm977t,
+    photoAlt: '조선소 야드에 거치된 9.77톤급 어장관리선',
+  }),
 ];
 
 /**
  * 목록 페이지의 구획. 순서대로 렌더된다.
  *
  * 해당 카테고리에 모델이 하나도 없으면 그 구획은 그리지 않는다.
- * 빈 제목만 덩그러니 남는 것보다 아예 없는 편이 낫고,
- * 어선 데이터가 채워지는 즉시 자동으로 나타난다.
+ * 빈 제목만 덩그러니 남는 것보다 아예 없는 편이 낫다.
  */
 export const MODEL_SECTIONS: {
   category: BoatCategory;
@@ -144,16 +268,19 @@ export function getModelBySlug(slug: string | undefined): BoatModel | undefined 
 }
 
 /**
- * 상세 페이지 하단 이전/다음 이동용. 라인업 양 끝에서는 순환한다.
+ * 상세 페이지 하단 이전/다음 이동용.
  *
- * 모델이 둘뿐이면 순환 계산상 이전과 다음이 같은 모델이 된다.
- * 같은 배를 '이전'과 '다음'으로 두 번 보여주면 고장난 것처럼 보이므로
- * 그 경우에는 다음 하나만 돌려준다.
+ * 같은 카테고리 안에서만 순환한다 — 9.77톤 어선의 '다음'이 레저보트로
+ * 튀면 라인업을 훑는 흐름이 끊긴다. 모델이 둘뿐이면 순환 계산상
+ * 이전과 다음이 같은 모델이 되므로 그 경우에는 다음 하나만 돌려준다.
  */
 export function getAdjacentModels(slug: string) {
-  const list = VIEWABLE_MODELS;
+  const current = VIEWABLE_MODELS.find((m) => m.slug === slug);
+  if (!current) return { prev: undefined, next: undefined };
+
+  const list = VIEWABLE_MODELS.filter((m) => m.category === current.category);
   const i = list.findIndex((m) => m.slug === slug);
-  if (i === -1 || list.length < 2) return { prev: undefined, next: undefined };
+  if (list.length < 2) return { prev: undefined, next: undefined };
 
   const next = list[(i + 1) % list.length];
   if (list.length === 2) return { prev: undefined, next };

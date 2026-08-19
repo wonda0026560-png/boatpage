@@ -5,6 +5,7 @@ import Cursor from '../../components/layout/Cursor';
 import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import NavLink from '../../components/layout/NavLink';
+import factorySign from '../../assets/site/factory-sign.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -106,6 +107,11 @@ export default function AboutPage() {
             </div>
           ))}
         </section>
+
+        <figure className="about-block about-photo">
+          <img src={factorySign} alt="원다마린산업 사옥의 로고 간판" loading="lazy" />
+          <figcaption className="about-photo__caption">원다마린산업 사옥</figcaption>
+        </figure>
 
         <section className="about-block" aria-labelledby="product-intro">
           <p className="about-block__label">제품소개</p>

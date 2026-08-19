@@ -1,38 +1,35 @@
 import { useLayoutEffect, useRef } from 'react';
+// 성형: 완도 공장 / 의장: 야드에 거치된 9.77톤급 / 시운전: 운항 중인 1.78톤급
+import factoryFront from '../../../assets/site/factory-front.jpg';
+import fitOutYard from '../../../assets/boats/fm-977.jpg';
+import seaTrial from '../../../assets/boats/fm-178.jpg';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/*
-  ⚠️ 아래 image 주소는 아직 리조트 스톡 사진입니다.
-  실제 작업장·시운전 사진으로 교체해야 합니다. alt는 교체될 사진 기준으로 적어두었습니다.
-*/
 const PANELS = [
   {
     num: '01',
     title: 'Moulding',
     sub: 'FRP laid up by hand, in our own moulds.',
-    image:
-      'https://images.unsplash.com/photo-1569748133568-b68f8812723a?w=2400&q=75&fm=jpg&fit=crop&auto=format',
-    alt: '깊은 바다 위를 항주하는 흰색 보트',
+    image: factoryFront,
+    alt: 'FRP 성형이 이루어지는 원다마린산업 공장',
   },
   {
     num: '02',
     title: 'Fit-Out',
     sub: 'Console, seating and live wells set to how you fish.',
-    image:
-      'https://images.unsplash.com/photo-1575224639551-12afa3e701d9?w=2400&q=75&fm=jpg&fit=crop&auto=format',
-    alt: '사람들을 태우고 선회하는 레저보트',
+    image: fitOutYard,
+    alt: '야드에서 의장 중인 9.77톤급 어장관리선',
   },
   {
     num: '03',
     title: 'Sea Trial',
     sub: 'Every hull runs before it leaves Wando.',
-    image:
-      'https://images.unsplash.com/photo-1593351415075-3bac9f45c877?w=2400&q=75&fm=jpg&fit=crop&auto=format',
-    alt: '해질 무렵 시운전 중인 레저보트',
+    image: seaTrial,
+    alt: '운항 중인 1.78톤급 어장관리선',
   },
 ];
 

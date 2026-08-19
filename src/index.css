@@ -1301,6 +1301,34 @@ img {
   color: var(--muted);
 }
 
+/* 실물 사진이 있는 행(어선)은 인덱스 옆에 썸네일 칸이 하나 더 생긴다 */
+.model-row.has-thumb {
+  grid-template-columns: 80px 168px minmax(0, 1fr) auto auto;
+}
+
+.model-row__thumb {
+  width: 168px;
+  height: 112px;
+  object-fit: cover;
+  filter: saturate(0.92);
+  transition: filter 0.35s ease;
+}
+
+.model-row:hover .model-row__thumb {
+  filter: saturate(1.05);
+}
+
+@media (max-width: 900px) {
+  .model-row.has-thumb {
+    grid-template-columns: 1fr;
+  }
+  .model-row__thumb {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+  }
+}
+
 /* 개발 중인 모델: 상세 페이지가 없으므로 클릭 가능한 인상을 주지 않는다 */
 .model-row.is-upcoming {
   cursor: default;
@@ -1547,6 +1575,49 @@ img {
   font-size: 13px;
   color: rgba(247, 245, 240, 0.65);
   max-width: 32ch;
+}
+
+/* 어선 상세: 3D 뷰어 대신 실물 사진. 색상 패널이 없으니 한 칸을 다 쓴다 */
+.detail-viewer--photo {
+  grid-template-columns: 1fr;
+}
+
+.detail-photo {
+  margin: 0;
+}
+
+.detail-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.detail-photo__caption {
+  margin-top: 1rem;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* 기업소개 사옥 사진 */
+.about-photo {
+  margin: 0;
+}
+
+.about-photo img {
+  display: block;
+  width: 100%;
+  max-width: 1100px;
+  height: auto;
+}
+
+.about-photo__caption {
+  margin-top: 1rem;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
 }
 
 .detail-colors__title {

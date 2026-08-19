@@ -98,41 +98,61 @@ export default function ModelDetailPage() {
             </h1>
             <p className="detail-hero__tagline">{model.type}</p>
           </div>
-          {model.lengthLabel && (
+          {model.keyFigure && (
             <dl className="detail-hero__figures">
               <div>
-                <dt>전장</dt>
-                <dd>{model.lengthLabel}</dd>
+                <dt>{model.keyFigure.label}</dt>
+                <dd>{model.keyFigure.value}</dd>
               </div>
             </dl>
           )}
         </header>
 
-        <section className="detail-viewer" aria-label={`${model.name} 3D 보기`}>
-          <BoatViewer3D hull={model.hull} color={color.hex} modelName={model.name} />
+        {/*
+          어선은 실물 사진, 레저보트는 3D 뷰어.
+          실제 건조한 배 사진이 있으면 코드로 만든 3D보다 그쪽이 설득력 있다.
+        */}
+        <section
+          className={`detail-viewer${model.photo ? ' detail-viewer--photo' : ''}`}
+          aria-label={`${model.name} ${model.photo ? '사진' : '3D 보기'}`}
+        >
+          {model.photo ? (
+            <figure className="detail-photo">
+              <img src={model.photo} alt={model.photoAlt ?? model.name} width={1920} height={1440} />
+              <figcaption className="detail-photo__caption">
+                실제 건조·인도된 선박입니다.
+              </figcaption>
+            </figure>
+          ) : (
+            model.hull && (
+              <BoatViewer3D hull={model.hull} color={color?.hex ?? '#1B3A57'} modelName={model.name} />
+            )
+          )}
 
-          <div className="detail-colors">
-            <h2 className="detail-colors__title">외관 색상</h2>
-            <div className="detail-colors__swatches" role="radiogroup" aria-label="외관 색상">
-              {model.colors.map((c, i) => (
-                <button
-                  key={c.hex}
-                  type="button"
-                  role="radio"
-                  aria-checked={i === colorIndex}
-                  aria-label={c.name}
-                  title={c.name}
-                  className={`detail-colors__swatch${i === colorIndex ? ' is-active' : ''}`}
-                  style={{ background: c.hex }}
-                  onClick={() => setColorIndex(i)}
-                />
-              ))}
+          {model.colors.length > 0 && color && (
+            <div className="detail-colors">
+              <h2 className="detail-colors__title">외관 색상</h2>
+              <div className="detail-colors__swatches" role="radiogroup" aria-label="외관 색상">
+                {model.colors.map((c, i) => (
+                  <button
+                    key={c.hex}
+                    type="button"
+                    role="radio"
+                    aria-checked={i === colorIndex}
+                    aria-label={c.name}
+                    title={c.name}
+                    className={`detail-colors__swatch${i === colorIndex ? ' is-active' : ''}`}
+                    style={{ background: c.hex }}
+                    onClick={() => setColorIndex(i)}
+                  />
+                ))}
+              </div>
+              <p className="detail-colors__current">{color.name}</p>
+              <p className="detail-colors__note">
+                위 색상 외에도 원하시는 색으로 주문 제작이 가능합니다.
+              </p>
             </div>
-            <p className="detail-colors__current">{color.name}</p>
-            <p className="detail-colors__note">
-              위 색상 외에도 원하시는 색으로 주문 제작이 가능합니다.
-            </p>
-          </div>
+          )}
         </section>
 
         <section className="detail-body">

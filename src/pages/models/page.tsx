@@ -84,11 +84,23 @@ export default function ModelsPage() {
             return (
               <article
                 key={model.slug}
-                className={`model-row${isUpcoming ? ' is-upcoming' : ''}`}
+                className={`model-row${isUpcoming ? ' is-upcoming' : ''}${model.thumb ? ' has-thumb' : ''}`}
                 onClick={isUpcoming ? undefined : () => navigate(`/models/${model.slug}`)}
                 data-cursor={isUpcoming ? undefined : 'expand'}
               >
                 <div className="model-row__index">{model.index}</div>
+
+                {/* 실물 사진이 있는 모델(어선)은 행에 썸네일을 붙인다 */}
+                {model.thumb && (
+                  <img
+                    className="model-row__thumb"
+                    src={model.thumb}
+                    alt={model.photoAlt ?? model.name}
+                    loading="lazy"
+                    width={640}
+                    height={480}
+                  />
+                )}
 
                 <div className="model-row__main">
                   <h2 className="model-row__name">
@@ -99,10 +111,10 @@ export default function ModelsPage() {
                 </div>
 
                 <dl className="model-row__meta">
-                  {model.lengthLabel && (
+                  {model.keyFigure && (
                     <div>
-                      <dt>전장</dt>
-                      <dd>{model.lengthLabel}</dd>
+                      <dt>{model.keyFigure.label}</dt>
+                      <dd>{model.keyFigure.value}</dd>
                     </div>
                   )}
                 </dl>

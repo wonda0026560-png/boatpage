@@ -1,11 +1,12 @@
 import { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// "Built in Wando / by Hand" 문구 아래에 실제 완도 사옥이 깔린다
+import factoryWide from '../../../assets/site/factory-wide.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const IMAGE =
-  'https://images.unsplash.com/photo-1619382997249-4b126250d03e?w=2400&q=75&fm=jpg&fit=crop&auto=format';
+const IMAGE = factoryWide;
 
 export default function Manifesto() {
   const rootRef = useRef<HTMLElement>(null);
