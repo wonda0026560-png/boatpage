@@ -13,21 +13,21 @@ const PANELS = [
   {
     num: '01',
     title: 'Moulding',
-    sub: 'FRP laid up by hand, in our own moulds.',
+    sub: '자체 몰드에 손으로 적층하는 FRP 성형.',
     image: factoryFront,
     alt: 'FRP 성형이 이루어지는 원다마린산업 공장',
   },
   {
     num: '02',
     title: 'Fit-Out',
-    sub: 'Console, seating and live wells set to how you fish.',
+    sub: '콘솔·좌석·활어창을 조업 방식에 맞춰 배치합니다.',
     image: fitOutYard,
     alt: '야드에서 의장 중인 9.77톤급 어장관리선',
   },
   {
     num: '03',
     title: 'Sea Trial',
-    sub: 'Every hull runs before it leaves Wando.',
+    sub: '모든 선체는 완도 앞바다에서 시운전을 거쳐 인도됩니다.',
     image: seaTrial,
     alt: '운항 중인 1.78톤급 어장관리선',
   },
@@ -71,7 +71,7 @@ export default function StackedPanels() {
           <img className="stacked__img" src={p.image} alt={p.alt} />
           <div className="stacked__panel-overlay" />
           <div className="stacked__content">
-            <div className="stacked__num">{p.num} — Stage</div>
+            <div className="stacked__num">{p.num} — 공정</div>
             <div>
               <h3 className="stacked__title">{p.title}</h3>
               <p className="stacked__sub">{p.sub}</p>

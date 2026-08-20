@@ -78,8 +78,8 @@ export default function Hero() {
       <div className="hero__overlay" />
 
       <div className="hero__topline">
-        <span>FRP Boat Builder · Wando, Korea</span>
-        <span>Est. 1994 — Wonda Shipyard</span>
+        <span>전라남도 완도 · FRP 선박 건조</span>
+        <span>1994년 원다조선소에서 시작</span>
       </div>
 
       <div className="hero__watermark" aria-hidden="true">
@@ -101,8 +101,8 @@ export default function Hero() {
           </span>
         </h1>
         <p className="hero__sub" style={{ transform: 'translateY(20px)' }}>
-          FRP fishing and leisure boats, moulded and fitted out by hand in Wando.
-          Three decades of working hulls stand behind every leisure model we launch.
+          완도에서 직접 성형하고 의장하는 FRP 낚시·레저보트.
+          30년 넘게 지어 온 조업선의 경험이 모든 레저 모델 뒤에 있습니다.
         </p>
         {/*
           홈 본문에서 모델 페이지로 들어가는 주 경로.
@@ -114,7 +114,7 @@ export default function Hero() {
         </Link>
       </div>
 
-      <div className="hero__scroll">Scroll to the lineup ↓</div>
+      <div className="hero__scroll">아래로 내려 라인업 보기 ↓</div>
     </section>
   );
 }

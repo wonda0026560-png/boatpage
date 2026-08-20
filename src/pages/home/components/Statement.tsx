@@ -5,10 +5,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const STEPS = [
-  { num: '01', label: 'Design' },
-  { num: '02', label: 'Mould' },
-  { num: '03', label: 'Fit-Out' },
-  { num: '04', label: 'Launch' },
+  { num: '01', label: '설계' },
+  { num: '02', label: '성형' },
+  { num: '03', label: '의장' },
+  { num: '04', label: '진수' },
 ];
 
 export default function Statement() {

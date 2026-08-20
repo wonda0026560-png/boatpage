@@ -21,9 +21,9 @@ const ITEMS: BentoItem[] = [
   {
     num: '01',
     title: 'Hull',
-    short: 'A mono hull that behaves like a trimaran.',
+    short: '단동선이지만 삼동선처럼 거동하는 선형.',
     long:
-      'The WLS560 runs a V-form mono hull with a knuckle worked into each side. One hull to build and berth, but the buoyancy and roll damping of three — the boat sits flat when you stand on the gunwale to land a fish.',
+      'WLS560은 V형 모노헐 양현에 너클파트를 더한 선형입니다. 건조와 계류는 단동선처럼 간편하면서 부력과 횡동요 억제는 삼동선의 장점을 가져와, 뱃전에 서서 고기를 걷어 올려도 배가 크게 기울지 않습니다.',
     image:
       'https://images.unsplash.com/photo-1575224639406-b218af1ee31e?w=2400&q=75&fm=jpg&fit=crop&auto=format',
     alt: '선회하며 항적을 남기는 레저보트 항공 촬영',
@@ -31,9 +31,9 @@ const ITEMS: BentoItem[] = [
   {
     num: '02',
     title: 'Deep-V',
-    short: 'Cuts chop instead of slamming through it.',
+    short: '파도를 때리지 않고 가르며 나아갑니다.',
     long:
-      'Deadrise carried well forward so the bow parts a short sea rather than pounding on it. The knuckles catch the spray the V throws and push it down and out, which keeps the deck dry at working speed.',
+      '선수까지 깊게 이어지는 V형 선저가 짧은 너울을 두드리지 않고 가릅니다. V가 밀어낸 물보라는 너클파트가 받아 아래로 눌러 주어, 항주 속도에서도 갑판이 잘 젖지 않습니다.',
     image:
       'https://images.unsplash.com/photo-1541369470242-5e2ac9841992?w=2400&q=75&fm=jpg&fit=crop&auto=format',
     alt: '해안선을 따라 항주하는 보트와 물살',
@@ -41,9 +41,9 @@ const ITEMS: BentoItem[] = [
   {
     num: '03',
     title: 'Hold',
-    short: 'A large insulated hold, built into the sole.',
+    short: '갑판에 매립해 성형한 대형 어창.',
     long:
-      'The fish hold is laid up as part of the deck rather than dropped in afterwards. It keeps the catch cold and low, and because the weight sits under the sole it works with the hull instead of against it.',
+      '어창을 나중에 얹지 않고 갑판과 한 몸으로 성형합니다. 어획물을 낮고 차게 보관할 수 있고, 무게가 바닥 아래에 실려 선체 균형에도 유리합니다.',
     image:
       'https://images.unsplash.com/photo-1575224715567-f243fedb7f4f?w=2400&q=75&fm=jpg&fit=crop&auto=format',
     alt: '잔잔한 바다를 지나는 레저보트 항공 촬영',
@@ -51,9 +51,9 @@ const ITEMS: BentoItem[] = [
   {
     num: '04',
     title: 'Deck',
-    short: 'Room to cast from bow to transom.',
+    short: '선수부터 선미까지 트인 낚시 공간.',
     long:
-      'The centre console layout leaves a clear walkaround. Console position, seating and live wells are set to the way you actually fish — we arrange the fit-out per order rather than shipping one fixed interior.',
+      '센터콘솔 배치로 배 둘레를 한 바퀴 돌 수 있는 통로를 확보했습니다. 콘솔 위치·좌석·활어창은 정해진 구성 하나로 찍어내지 않고, 실제 낚시하시는 방식에 맞춰 주문마다 조정합니다.',
     image:
       'https://images.unsplash.com/photo-1552160757-52790c6f4faf?w=2400&q=75&fm=jpg&fit=crop&auto=format',
     alt: '푸른 바다 위를 직진하는 흰색 보트',
@@ -61,9 +61,9 @@ const ITEMS: BentoItem[] = [
   {
     num: '05',
     title: 'Engines',
-    short: 'We started with engines, not hulls.',
+    short: '우리는 선체가 아니라 엔진에서 시작했습니다.',
     long:
-      'Wonda began by tuning industrial diesel engines for marine service and installing them in working boats. That grounding is why we size and mount power to what a hull is designed to carry, and never past it.',
+      '원다는 산업용 디젤엔진을 선박용으로 튜닝해 장착하는 일에서 출발했습니다. 그 경험이 있기에 선체가 설계상 감당하는 만큼만 엔진을 올리고, 그 이상은 달아 드리지 않습니다.',
     image:
       'https://images.unsplash.com/photo-1567369244263-8f45293b2178?w=2400&q=75&fm=jpg&fit=crop&auto=format',
     alt: '항주하며 흰 물살을 만드는 보트',
@@ -166,7 +166,7 @@ export default function BentoGrid() {
                     {item.long}
                   </p>
                 </div>
-                <span className="bento__back-close">← Close</span>
+                <span className="bento__back-close">← 닫기</span>
               </div>
             </button>
           );

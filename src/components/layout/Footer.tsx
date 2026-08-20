@@ -62,7 +62,7 @@ export default function Footer() {
       </div>
 
       <div className="site-footer__biz">
-        <h3 className="site-footer__biz-title">Business Information</h3>
+        <h3 className="site-footer__biz-title">사업자 정보</h3>
         <dl className="site-footer__biz-list">
           {BUSINESS_INFO.map((row) => (
             <div className="site-footer__biz-row" key={row.label}>
