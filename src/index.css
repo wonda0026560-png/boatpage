@@ -2125,13 +2125,20 @@ img {
   padding: 3rem 0;
   border-bottom: 1px solid var(--line);
   cursor: pointer;
-  transition: background 0.4s ease, padding 0.4s ease;
+  transition: background 0.4s ease;
 }
 
 .post-row:hover {
   background: rgba(11, 29, 46, 0.035);
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+}
+
+/* 모델 목록과 같은 방식 — padding 대신 자식을 transform으로 밀어 레이아웃을 건드리지 않는다 */
+.post-row > *:not(.post-row__link) {
+  transition: transform 0.4s ease;
+}
+
+.post-row:hover > *:not(.post-row__link) {
+  transform: translateX(1.5rem);
 }
 
 .post-row__date {
@@ -2228,9 +2235,9 @@ img {
     grid-template-columns: 1fr;
     gap: 0.8rem;
   }
-  .post-row:hover {
-    padding-left: 0;
-    padding-right: 0;
+  /* 터치 화면에는 호버가 없으므로 밀림 연출을 끄고 링크 표시는 항상 보여준다 */
+  .post-row:hover > *:not(.post-row__link) {
+    transform: none;
   }
   .post-row__go {
     opacity: 1;
