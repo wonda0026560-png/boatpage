@@ -7,7 +7,6 @@ const NAV_ITEMS = [
   { label: '모델', to: '/models' },
   { label: '건조 과정', to: '/#process' },
   { label: '기업소개', to: '/about' },
-  { label: '자주 묻는 질문', to: '/faq' },
 ];
 
 export default function Header() {

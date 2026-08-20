@@ -195,8 +195,8 @@ export default function AboutPage() {
             >
               wonda0026@kakao.com →
             </a>
-            <NavLink to="/faq" className="about-cta__link tlink">
-              자주 묻는 질문 →
+            <NavLink to="/models" className="about-cta__link tlink">
+              모델 라인업 보기 →
             </NavLink>
           </div>
         </aside>

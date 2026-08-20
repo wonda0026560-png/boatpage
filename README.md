@@ -25,7 +25,6 @@ npm run dev
 | `/models` | 모델 라인업 |
 | `/models/:slug` | 모델 상세 — three.js 3D 뷰어, 색상 선택 |
 | `/about` | 기업소개 |
-| `/faq` | 자주 묻는 질문 |
 
 ## 배포 (Railway)
 

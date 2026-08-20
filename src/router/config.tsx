@@ -3,7 +3,6 @@ import NotFound from "../pages/NotFound";
 import Home from "../pages/home/page";
 import ModelsPage from "../pages/models/page";
 import ModelDetailPage from "../pages/model-detail/page";
-import FaqPage from "../pages/faq/page";
 import AboutPage from "../pages/about/page";
 
 const routes: RouteObject[] = [
@@ -22,10 +21,6 @@ const routes: RouteObject[] = [
   {
     path: "/about",
     element: <AboutPage />,
-  },
-  {
-    path: "/faq",
-    element: <FaqPage />,
   },
   {
     path: "*",
