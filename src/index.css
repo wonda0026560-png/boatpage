@@ -2031,6 +2031,295 @@ img {
 }
 
 /* ============================================
+   BOARD — 게시판
+   ============================================ */
+.board {
+  background: var(--sand);
+  color: var(--deep);
+  padding: 22vh 6vw 12vh;
+}
+
+.board-head {
+  max-width: 1100px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 4rem;
+}
+
+.board-head__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.board-head__title {
+  font-weight: 900;
+  font-size: clamp(3.5rem, 13vw, 12rem);
+  line-height: 0.88;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  margin: 1.5rem 0 2.5rem;
+}
+
+.board-head__line {
+  display: block;
+  overflow: hidden;
+}
+
+.board-head__line > span {
+  display: block;
+}
+
+.board-head__body {
+  max-width: 46ch;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+
+/* 분류 필터 */
+.board-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 3rem;
+}
+
+.board-filter {
+  padding: 0.6rem 1.2rem;
+  border: 1px solid var(--line);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.board-filter:hover {
+  color: var(--deep);
+  border-color: var(--deep);
+}
+
+.board-filter.is-active {
+  background: var(--deep);
+  border-color: var(--deep);
+  color: var(--sand);
+}
+
+.board-filter:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 글 목록 */
+.post-list {
+  margin-top: 4rem;
+  border-top: 1px solid var(--line);
+}
+
+.post-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2.5rem;
+  padding: 3rem 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  transition: background 0.4s ease, padding 0.4s ease;
+}
+
+.post-row:hover {
+  background: rgba(11, 29, 46, 0.035);
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.post-row__date {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.post-row__category {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  margin-bottom: 0.9rem;
+}
+
+.post-row__title {
+  font-size: clamp(1.2rem, 2.6vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+}
+
+.post-row__summary {
+  margin-top: 0.9rem;
+  max-width: 60ch;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.post-row__go {
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-12px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  white-space: nowrap;
+}
+
+.post-row:hover .post-row__go {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 모델 목록과 같은 방식 — 실제 링크를 깔아 탭 이동과 스크린리더를 지원한다 */
+.post-row__link {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  text-indent: -9999px;
+  white-space: nowrap;
+}
+
+.post-row__link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -4px;
+}
+
+/* 글이 없을 때 */
+.board-empty {
+  margin-top: 6rem;
+  padding: 5rem 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.board-empty__title {
+  font-size: clamp(1.4rem, 3.4vw, 2.2rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+}
+
+.board-empty__body {
+  margin-top: 1.2rem;
+  max-width: 48ch;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.board-empty__link {
+  display: inline-block;
+  margin-top: 2rem;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+
+@media (max-width: 760px) {
+  .post-row {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  .post-row:hover {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .post-row__go {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ============================================
+   BOARD DETAIL — 글 상세
+   ============================================ */
+.post-detail {
+  background: var(--sand);
+  color: var(--deep);
+  padding: 18vh 6vw 12vh;
+}
+
+.post-detail__head {
+  max-width: 800px;
+  margin-top: 2.5rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.post-detail__meta {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.post-detail__category {
+  color: var(--accent);
+  letter-spacing: 0.16em;
+}
+
+.post-detail__title {
+  margin: 1.5rem 0 1.5rem;
+  font-size: clamp(2rem, 5.5vw, 3.6rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+}
+
+.post-detail__summary {
+  font-size: clamp(15px, 1.7vw, 18px);
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.post-body {
+  max-width: 800px;
+  margin-top: 4rem;
+}
+
+.post-body p {
+  font-size: 16px;
+  line-height: 1.95;
+  margin-bottom: 1.8rem;
+}
+
+.post-figure {
+  max-width: 1000px;
+  margin: 4rem 0 0;
+}
+
+.post-figure img {
+  width: 100%;
+  height: auto;
+}
+
+.post-figure figcaption {
+  margin-top: 1rem;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* 글 제목은 모델명보다 길어 대문자·초대형 처리를 쓰지 않는다 */
+.post-detail__nav-title {
+  font-size: clamp(1rem, 2.2vw, 1.4rem);
+  text-transform: none;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  max-width: 22ch;
+}
+
+/* ============================================
    FLOATING CHAT BUTTON
    ============================================ */
 /*
