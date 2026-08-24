@@ -1,15 +1,25 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
-import HeroCanvas from './HeroCanvas';
-// 실제 건조한 7.93톤급 어장관리선(크레인 사양). 로컬 자산이라
-// 외부 이미지 서비스의 CORS 차단으로 WebGL 텍스처가 깨지던 문제도 사라진다.
-import heroImage from '../../../assets/site/hero-sunset.jpg';
-
-const HERO_IMAGE = heroImage;
+// 드론으로 촬영한 항주 영상. 포스터는 영상 첫 프레임이라 전환이 튀지 않는다.
+import heroVideo from '../../../assets/video/hero-boat.mp4';
+import heroPoster from '../../../assets/video/hero-boat-poster.jpg';
 
 export default function Hero() {
   const rootRef = useRef<HTMLElement>(null);
+  /*
+    영상은 조건이 맞을 때만 붙인다.
+    - 모바일: 데이터도 아깝고 디코딩 부담이 가장 큰 기기라 포스터만 쓴다
+    - prefers-reduced-motion: 자동 재생 자체가 접근성 문제라 켜지 않는다
+    처음부터 false로 두고 마운트 후 판단해야 서버·클라이언트 첫 페인트가 어긋나지 않는다.
+  */
+  const [useVideo, setUseVideo] = useState(false);
+
+  useEffect(() => {
+    const wide = window.matchMedia('(min-width: 761px)').matches;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setUseVideo(wide && !reduced);
+  }, []);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -69,12 +79,29 @@ export default function Hero() {
 
   return (
     <section ref={rootRef} className="hero" id="top">
-      <HeroCanvas imageUrl={HERO_IMAGE} />
+      {/*
+        포스터 이미지는 항상 깔아둔다. 영상이 준비되기 전 첫 페인트를 채우고,
+        모바일·감속모션 환경에서는 이것만 남는다.
+      */}
       <img
         className="hero__fallback"
-        src={HERO_IMAGE}
-        alt="노을 무렵 항구에 계류한 원다마린산업 7.93톤급 어장관리선"
+        src={heroPoster}
+        alt="드론으로 촬영한 원다마린산업 보트의 항주 장면"
       />
+      {useVideo && (
+        <video
+          className="hero__video"
+          src={heroVideo}
+          poster={heroPoster}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+          tabIndex={-1}
+        />
+      )}
       <div className="hero__overlay" />
 
       <div className="hero__topline">

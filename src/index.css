@@ -405,7 +405,8 @@ img {
 }
 
 .hero__canvas,
-.hero__fallback {
+.hero__fallback,
+.hero__video {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -417,6 +418,18 @@ img {
   object-fit: cover;
   object-position: center;
   z-index: 0;
+}
+
+/*
+  포스터 이미지(z-index 0) 바로 위에 깔아, 영상이 첫 프레임을 그리기 전까지
+  아래 이미지가 보이도록 한다. 둘의 그림이 같아서 전환이 눈에 띄지 않는다.
+  pointer-events를 끄지 않으면 커스텀 커서와 CTA 클릭을 영상이 가로챈다.
+*/
+.hero__video {
+  object-fit: cover;
+  object-position: center;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .hero__overlay {
