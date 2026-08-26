@@ -16,6 +16,7 @@ import fm178 from '../assets/boats/fm-178.jpg';
 import fm190 from '../assets/boats/fm-190.jpg';
 import fm793 from '../assets/boats/fm-793.jpg';
 import fm977 from '../assets/boats/fm-977.jpg';
+import fm977in from '../assets/boats/fm-977-in.jpg';
 import fm075t from '../assets/boats/thumbs/fm-075.jpg';
 import fm089t from '../assets/boats/thumbs/fm-089.jpg';
 import fm120t from '../assets/boats/thumbs/fm-120.jpg';
@@ -24,6 +25,7 @@ import fm178t from '../assets/boats/thumbs/fm-178.jpg';
 import fm190t from '../assets/boats/thumbs/fm-190.jpg';
 import fm793t from '../assets/boats/thumbs/fm-793.jpg';
 import fm977t from '../assets/boats/thumbs/fm-977.jpg';
+import fm977int from '../assets/boats/thumbs/fm-977-in.jpg';
 
 export interface BoatColor {
   name: string;
@@ -54,8 +56,10 @@ export interface BoatModel {
   specs: BoatSpec[];
   /** 색상 선택 UI. 비어 있으면 그 구획 자체를 그리지 않는다. */
   colors: BoatColor[];
-  /** 개발 중인 모델. 상세 페이지를 만들지 않고 목록에만 노출한다. */
+  /** 아직 상세 페이지를 열지 않는 모델. 목록에만 노출한다. */
   upcoming?: boolean;
+  /** upcoming 모델의 상태 표시. 기본값은 '개발 중'. */
+  badge?: string;
   /**
    * 실물 사진. 있으면 상세 페이지에서 3D 뷰어 대신 사진을 보여주고,
    * 목록 행에 썸네일이 붙는다.
@@ -90,17 +94,26 @@ function fishingModel(args: {
   slug: string;
   index: string;
   ton: string;
-  outboard?: boolean;
-  photo: string;
-  thumb: string;
-  photoAlt: string;
+  /**
+   * 기관 형식. 같은 톤수라도 선내기·선외기는 별개 모델이라
+   * 이름 뒤에 작게 붙여 목록에서 구분되게 한다.
+   */
+  engine?: '선내기' | '선외기';
+  photo?: string;
+  thumb?: string;
+  photoAlt?: string;
+  upcoming?: boolean;
+  badge?: string;
 }): BoatModel {
   return {
     category: 'fishing',
     slug: args.slug,
     name: `${args.ton}톤급`,
+    suffix: args.engine,
     index: args.index,
-    type: args.outboard ? '어장관리선 · 선외기' : '어장관리선',
+    type: args.engine ? `어장관리선 · ${args.engine}` : '어장관리선',
+    upcoming: args.upcoming,
+    badge: args.badge,
     tagline: '어장 여건에 맞춘 주문 건조',
     description: FISHING_DESCRIPTION,
     keyFigure: { label: '톤수', value: `${args.ton}톤급` },
@@ -214,7 +227,7 @@ export const BOAT_MODELS: BoatModel[] = [
     slug: 'fm-793',
     index: '07',
     ton: '7.93',
-    outboard: true,
+    engine: '선외기',
     photo: fm793,
     thumb: fm793t,
     photoAlt: '크레인을 장착한 7.93톤급 어장관리선',
@@ -223,10 +236,28 @@ export const BOAT_MODELS: BoatModel[] = [
     slug: 'fm-977',
     index: '08',
     ton: '9.77',
-    outboard: true,
+    engine: '선외기',
     photo: fm977,
     thumb: fm977t,
-    photoAlt: '조선소 야드에 거치된 9.77톤급 어장관리선',
+    photoAlt: '조선소 야드에 거치된 9.77톤급 선외기 어장관리선',
+  }),
+  fishingModel({
+    slug: 'fm-977-in',
+    index: '09',
+    ton: '9.77',
+    engine: '선내기',
+    photo: fm977in,
+    thumb: fm977int,
+    photoAlt: '나란히 계류된 9.77톤급 선내기 어장관리선 두 척',
+  }),
+  // 건조 완료, 진수 후 사진을 받으면 상세 페이지를 연다
+  fishingModel({
+    slug: 'fm-1400-in',
+    index: '10',
+    ton: '14',
+    engine: '선내기',
+    upcoming: true,
+    badge: '진수 예정',
   }),
 ];
 

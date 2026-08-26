@@ -120,7 +120,7 @@ export default function ModelsPage() {
                 </dl>
 
                 {isUpcoming ? (
-                  <span className="model-row__badge">개발 중</span>
+                  <span className="model-row__badge">{model.badge ?? '개발 중'}</span>
                 ) : (
                   <>
                     <span className="model-row__go" aria-hidden="true">

@@ -11,6 +11,7 @@ const MARQUEE_ITEMS = [
   'Cabin Models',
   'Custom Fit-Out',
   'Sea Trials',
+  'Boat Storage',
 ];
 
 export default function Marquee() {

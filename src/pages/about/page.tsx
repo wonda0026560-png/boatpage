@@ -183,6 +183,19 @@ export default function AboutPage() {
           </p>
         </section>
 
+        <section className="about-block" aria-labelledby="storage">
+          <p className="about-block__label">보관 서비스</p>
+          <h2 className="about-block__title" id="storage">
+            보트 보관소<br />
+            운영
+          </h2>
+          <p className="about-block__body">
+            배는 사는 것보다 두는 것이 더 어렵습니다. 원다마린산업은 보트 보관소를 직접
+            운영합니다. 배를 지은 곳에서 그대로 맡아 관리하므로, 보관 중 손볼 일이 생겨도
+            선체를 아는 사람이 바로 확인합니다. 이용 조건은 문의해 주시면 안내해 드리겠습니다.
+          </p>
+        </section>
+
         <aside className="about-cta">
           <h2 className="about-cta__title">
             건조 문의<span className="about-cta__dot">.</span>
