@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const MARQUEE_ITEMS = [
   'FRP Hulls',
-  'Deep-V Knuckle',
+  'Knuckle Hull',
   'Center Console',
   'Cabin Models',
   'Custom Fit-Out',

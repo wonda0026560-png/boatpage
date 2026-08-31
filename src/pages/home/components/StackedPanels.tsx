@@ -1,8 +1,8 @@
 import { useLayoutEffect, useRef } from 'react';
-// 성형: 완도 공장 / 의장: 야드에 거치된 9.77톤급 / 시운전: 운항 중인 1.78톤급
+// 성형: 완도 공장 / 의장: 야드에 거치된 9.77톤급 / 시운전: 1.90톤급
 import factoryFront from '../../../assets/site/factory-front.jpg';
 import fitOutYard from '../../../assets/boats/fm-977.jpg';
-import seaTrial from '../../../assets/boats/fm-178.jpg';
+import seaTrial from '../../../assets/boats/fm-190.jpg';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -29,7 +29,7 @@ const PANELS = [
     title: 'Sea Trial',
     sub: '모든 선체는 완도 앞바다에서 시운전을 거쳐 인도됩니다.',
     image: seaTrial,
-    alt: '운항 중인 1.78톤급 어장관리선',
+    alt: '완도 앞바다에 계류된 1.90톤급 어장관리선',
   },
 ];
 
