@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -6,7 +6,8 @@ import Cursor from '../../components/layout/Cursor';
 import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import { useSmoothScroll } from '../../hooks/useSmoothScroll';
-import { POSTS, POST_CATEGORIES, formatPostDate } from '../../data/posts';
+import { POST_CATEGORIES, formatPostDate } from '../../data/posts';
+import { api, type Post } from '../../lib/api';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,32 +17,45 @@ export default function BoardPage() {
   const rootRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const [filter, setFilter] = useState<string>(ALL);
+  // null 이면 아직 불러오는 중
+  const [posts, setPosts] = useState<Post[] | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   useSmoothScroll();
+
+  useEffect(() => {
+    let alive = true;
+    api
+      .posts()
+      .then((list) => alive && setPosts(list))
+      .catch((e: Error) => {
+        if (!alive) return;
+        setLoadError(e.message);
+        setPosts([]);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   // 글이 실제로 존재하는 분류만 버튼으로 내보낸다.
   const categories = useMemo(() => {
-    const used = new Set(POSTS.map((p) => p.category));
+    const used = new Set((posts ?? []).map((p) => p.category));
     return [ALL, ...POST_CATEGORIES.filter((c) => used.has(c))];
-  }, []);
+  }, [posts]);
 
-  const visible = useMemo(
-    () => (filter === ALL ? POSTS : POSTS.filter((p) => p.category === filter)),
-    [filter]
-  );
+  const visible = useMemo(() => {
+    const list = posts ?? [];
+    return filter === ALL ? list : list.filter((p) => p.category === filter);
+  }, [filter, posts]);
 
   useLayoutEffect(() => {
+    if (!posts) return;
     const ctx = gsap.context(() => {
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (prefersReduced) {
         gsap.set('.post-row', { opacity: 1, y: 0 });
         return;
       }
-
-      gsap.from('.board-head__title span', {
-        yPercent: 115,
-        duration: 1.1,
-        ease: 'power4.out',
-      });
 
       gsap.utils.toArray<HTMLElement>('.post-row').forEach((row) => {
         gsap.fromTo(
@@ -58,7 +72,16 @@ export default function BoardPage() {
       });
     }, rootRef);
     return () => ctx.revert();
-  }, [filter]);
+  }, [filter, posts]);
+
+  useLayoutEffect(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
+    const ctx = gsap.context(() => {
+      gsap.from('.board-head__title span', { yPercent: 115, duration: 1.1, ease: 'power4.out' });
+    }, rootRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
     <div ref={rootRef}>
@@ -96,14 +119,19 @@ export default function BoardPage() {
           </div>
         )}
 
-        {visible.length === 0 ? (
+        {posts === null ? (
+          <p className="board-status" role="status">
+            불러오는 중…
+          </p>
+        ) : visible.length === 0 ? (
           /* 글이 없을 때. 고장난 화면처럼 보이지 않도록 안내를 남긴다. */
           <div className="board-empty">
             <p className="board-empty__title">아직 등록된 글이 없습니다</p>
             <p className="board-empty__body">
-              새로운 소식이 준비되는 대로 이곳에 올리겠습니다.
-              문의는 아래 메일로 주시면 빠르게 답변드립니다.
+              새로운 소식이 준비되는 대로 이곳에 올리겠습니다. 문의는 아래 메일로 주시면 빠르게
+              답변드립니다.
             </p>
+            {loadError && <p className="board-empty__note">{loadError}</p>}
             <a
               href="mailto:wonda0026@kakao.com"
               className="board-empty__link tlink"
@@ -117,7 +145,7 @@ export default function BoardPage() {
             {visible.map((post) => (
               <article
                 className="post-row"
-                key={post.slug}
+                key={post.id}
                 onClick={() => navigate(`/board/${post.slug}`)}
                 data-cursor="expand"
               >
@@ -128,7 +156,7 @@ export default function BoardPage() {
                 <div className="post-row__main">
                   <span className="post-row__category">{post.category}</span>
                   <h2 className="post-row__title">{post.title}</h2>
-                  <p className="post-row__summary">{post.summary}</p>
+                  {post.summary && <p className="post-row__summary">{post.summary}</p>}
                 </div>
 
                 <span className="post-row__go" aria-hidden="true">

@@ -2298,6 +2298,8 @@ img {
   font-size: 16px;
   line-height: 1.95;
   margin-bottom: 1.8rem;
+  /* 관리자가 문단 안에서 친 한 줄 개행을 그대로 살린다 (빈 줄은 문단 분리) */
+  white-space: pre-line;
 }
 
 .post-figure {
@@ -2324,6 +2326,378 @@ img {
   letter-spacing: -0.02em;
   line-height: 1.35;
   max-width: 22ch;
+}
+
+/* 게시판 로딩 표시 */
+.board-status {
+  margin-top: 6rem;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.board-empty__note {
+  margin-top: 1rem;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+/* ============================================
+   ADMIN — 게시판 관리
+   ============================================ */
+/*
+  사이트 전체는 커스텀 커서(cursor: none)를 쓰지만 입력 폼에서는 방해만 된다.
+  관리자 화면 안에서는 브라우저 기본 커서로 되돌린다.
+*/
+.admin-page,
+.admin-page * {
+  cursor: auto;
+}
+
+.admin {
+  min-height: 100vh;
+  background: var(--sand);
+  color: var(--deep);
+  padding: 9rem 6vw 8rem;
+}
+
+.admin-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-bar__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.admin-bar__title {
+  margin-top: 0.6rem;
+  font-size: clamp(1.6rem, 3.4vw, 2.4rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.admin-bar__actions,
+.admin-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 1.1rem;
+  border: 1px solid var(--deep);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--deep);
+  background: transparent;
+  transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.admin-btn:hover {
+  background: var(--deep);
+  color: var(--sand);
+}
+
+.admin-btn--primary {
+  background: var(--deep);
+  color: var(--sand);
+}
+
+.admin-btn--primary:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.admin-btn--danger {
+  border-color: rgba(11, 29, 46, 0.25);
+  color: var(--muted);
+}
+
+.admin-btn--danger:hover {
+  background: #a33d2a;
+  border-color: #a33d2a;
+  color: var(--sand);
+}
+
+.admin-btn--small {
+  padding: 0.4rem 0.75rem;
+  font-size: 12px;
+}
+
+.admin-btn:disabled,
+.admin-btn.is-busy {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.admin-btn:focus-visible,
+.admin-input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin: 2.5rem 0 2rem;
+}
+
+.admin-note {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.admin-error {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #a33d2a;
+}
+
+.admin-alert {
+  margin-top: 2rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--accent);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--deep);
+}
+
+/* 로그인 */
+.admin-login {
+  max-width: 360px;
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* 목록 */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 0.9rem 0.8rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.admin-table th {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.admin-table__title {
+  white-space: normal;
+  font-weight: 600;
+  min-width: 18ch;
+}
+
+.admin-table__title em {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.admin-table__actions {
+  text-align: right;
+}
+
+.admin-table__actions .admin-btn + .admin-btn {
+  margin-left: 0.4rem;
+}
+
+.admin-table tr.is-draft td {
+  color: var(--muted);
+}
+
+.admin-badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--line);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.admin-badge.is-on {
+  border-color: var(--deep);
+  background: var(--deep);
+  color: var(--sand);
+}
+
+/* 편집기 */
+.admin-form {
+  margin-top: 2.5rem;
+}
+
+.admin-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.4rem 2rem;
+  max-width: 960px;
+}
+
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-field--wide {
+  grid-column: 1 / -1;
+}
+
+.admin-field__label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--deep);
+}
+
+.admin-field__label small {
+  margin-left: 0.6rem;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.admin-input {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid rgba(11, 29, 46, 0.25);
+  background: #fff;
+  font: inherit;
+  font-size: 15px;
+  color: var(--deep);
+  transition: border-color 0.2s ease;
+}
+
+.admin-input:focus {
+  border-color: var(--deep);
+}
+
+.admin-input--title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.admin-input--mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 14px;
+}
+
+.admin-input--body {
+  line-height: 1.8;
+  resize: vertical;
+  min-height: 240px;
+}
+
+.admin-input--small {
+  padding: 0.5rem 0.7rem;
+  font-size: 13px;
+}
+
+/* 사진 */
+.admin-images {
+  max-width: 960px;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+
+.admin-images__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.admin-images__list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.admin-image {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.admin-image img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--line);
+}
+
+.admin-form__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  max-width: 960px;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+
+.admin-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--deep);
+}
+
+@media (max-width: 760px) {
+  .admin {
+    padding: 7rem 5vw 5rem;
+  }
+  .admin-form__grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-table th:nth-child(4),
+  .admin-table td:nth-child(4) {
+    display: none;
+  }
 }
 
 /* ============================================

@@ -102,5 +102,10 @@ export default defineConfig({
   server: {
     port: 3000,
     host: "0.0.0.0",
+    // 개발 중에는 vite 가 화면만 띄우고 API 는 server/index.js(3002) 로 넘긴다
+    proxy: { "/api": "http://localhost:3002" },
+  },
+  preview: {
+    proxy: { "/api": "http://localhost:3002" },
   },
 });

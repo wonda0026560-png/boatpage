@@ -6,6 +6,8 @@ import ModelDetailPage from "../pages/model-detail/page";
 import AboutPage from "../pages/about/page";
 import BoardPage from "../pages/board/page";
 import BoardDetailPage from "../pages/board-detail/page";
+import AdminPage from "../pages/admin/page";
+import AdminEditorPage from "../pages/admin/editor";
 
 const routes: RouteObject[] = [
   {
@@ -31,6 +33,14 @@ const routes: RouteObject[] = [
   {
     path: "/board/:slug",
     element: <BoardDetailPage />,
+  },
+  {
+    path: "/admin",
+    element: <AdminPage />,
+  },
+  {
+    path: "/admin/posts/:id",
+    element: <AdminEditorPage />,
   },
   {
     path: "*",

@@ -34,14 +34,39 @@ GitHub 저장소를 Railway 프로젝트에 연결해두면 `main` 에 푸시할
 | 단계 | 명령 |
 | --- | --- |
 | 빌드 | `npm run build` → `out/` |
-| 실행 | `npm start` |
+| 실행 | `npm start` → `server/index.js` |
 
-`npm start` 는 `serve -s out` 으로 정적 파일을 띄운다.
+`server/index.js` 는 Express 한 프로세스로 세 가지를 맡는다.
+빌드된 정적 사이트(SPA 폴백 포함), 게시판 공개 API, 관리자 API.
+포트는 Railway 가 주입하는 `PORT` 를 그대로 쓴다.
 
-- `-s` 옵션이 SPA 폴백을 처리한다. 이게 없으면 `/models` 같은 주소로
-  직접 들어왔을 때 404 가 난다. 라우팅이 클라이언트에서만 존재하기 때문이다.
-- 포트는 Railway 가 주입하는 `PORT` 를 그대로 쓰고 `0.0.0.0` 에 바인딩한다.
-  `localhost` 에 바인딩하면 컨테이너 밖에서 접속되지 않는다.
+### 환경변수 (Railway → Variables)
+
+| 이름 | 설명 |
+| --- | --- |
+| `DATABASE_URL` | Postgres 주소. Railway 에서 Postgres 를 추가하고 이 서비스에 **참조 변수**로 연결한다 (`${{Postgres.DATABASE_URL}}`) |
+| `ADMIN_PASSWORD` | `/admin` 로그인 비밀번호 |
+| `SESSION_SECRET` | 로그인 쿠키 서명 키. `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` 로 생성 |
+| `SITE_URL` | 배포 도메인. 공유 카드·canonical 에 쓰인다 |
+
+세 개 중 하나라도 없으면 사이트는 뜨지만 게시판 API·관리자 로그인이 막힌다.
+서버 로그에 어떤 값이 빠졌는지 찍힌다.
+
+## 게시판 관리
+
+글은 Postgres 에 저장되고 `/admin` 에서 작성한다 (헤더 메뉴에는 없다).
+
+- **새 글 쓰기** 를 누르면 빈 초안이 만들어지고 편집기가 열린다.
+  사진이 글에 붙어야 하므로 먼저 만든다.
+- 본문은 평문이다. **빈 줄로 문단을 나눈다.**
+- 사진은 올릴 때 긴 변 1600px JPEG 로 자동 축소해 DB 에 넣는다.
+  캡션은 사진 아래 입력칸에 쓴다.
+- **게시판에 공개** 를 켜고 저장해야 목록에 나온다. 공개하려면 제목이 있어야 한다.
+- 주소(slug)는 자동으로 `날짜-난수` 가 붙는다. 바꾸려면 영문 소문자·숫자·하이픈만.
+
+로컬에서 관리자까지 돌려 보려면 `.env.example` 을 `.env` 로 복사해 채우고
+터미널 두 개로 `npm run dev:api` 와 `npm run dev` 를 띄운다.
+vite 가 `/api` 요청을 API 서버(3002)로 넘긴다.
 
 ### 경로 설정
 
