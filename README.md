@@ -25,6 +25,9 @@ npm run dev
 | `/models` | 모델 라인업 |
 | `/models/:slug` | 모델 상세 — three.js 3D 뷰어, 색상 선택 |
 | `/about` | 기업소개 |
+| `/board` | 게시판 목록 |
+| `/board/:slug` | 게시판 글 |
+| `/admin`, `/admin/posts/:id` | 관리자 — 글 목록·편집기 (헤더 메뉴에 없음, noindex) |
 
 ## 배포 (Railway)
 
@@ -82,12 +85,15 @@ BASE_PATH=/하위경로/ npm run build
 
 ## 아직 채워야 할 것
 
-- **모델 제원** — `src/data/models.ts`. WLS560 외 나머지 제원 미확정.
-- **사진** — 홈의 이미지는 전부 임시 스톡 사진이다. 특히 건조 과정
-  (`StackedPanels.tsx`)의 성형·의장 사진은 실제 작업장 사진이 필요하다.
-  히어로 배경(`Hero.tsx`)도 아직 교체 전이다.
+- **모델 제원** — `src/data/models.ts`. WLS560 외 나머지는 톤수만 확정.
+  제원 배열이 비면 상세 페이지가 "준비 중" 으로 표시된다.
+  14톤급 선내기는 진수 후 사진·제원을 받기로 했다.
+- **사진** — 히어로·건조 과정은 실제 사진으로 교체했다.
+  남은 스톡 사진은 홈 `BentoGrid.tsx` 의 카드 5장(Unsplash)뿐이다.
 - **카카오톡 채널** — `src/components/layout/ChatButton.tsx` 의
   `KAKAO_CHANNEL_URL`. 비어 있으면 메일 문의 버튼으로 표시된다.
+- **확인이 필요한 문구** — 어창 성형 공법, 주문마다 의장 조정, 엔진 과마력 거부,
+  자체 몰드·전수 시운전. 사실 확인 전까지는 근거가 없는 서술이다.
 
 ## 기술 스택
 
