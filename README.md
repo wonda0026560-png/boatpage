@@ -110,7 +110,7 @@ BASE_PATH=/하위경로/ npm run build
   남은 스톡 사진은 홈 `BentoGrid.tsx` 의 카드 5장(Unsplash)뿐이다.
 - **카카오톡 채널** — `src/components/layout/ChatButton.tsx` 의
   `KAKAO_CHANNEL_URL`. 비어 있으면 메일 문의 버튼으로 표시된다.
-- **확인이 필요한 문구** — 어창 성형 공법, 주문마다 의장 조정, 엔진 과마력 거부,
+- **확인이 필요한 문구** — 주문마다 의장 조정, 엔진 과마력 거부,
   자체 몰드·전수 시운전. 사실 확인 전까지는 근거가 없는 서술이다.
 
 ## 기술 스택
