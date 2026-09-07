@@ -6,8 +6,11 @@ import Cursor from '../../components/layout/Cursor';
 import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import NavLink from '../../components/layout/NavLink';
+import Markdown from '../../components/Markdown';
 import { useSmoothScroll } from '../../hooks/useSmoothScroll';
-import { formatPostDate, splitParagraphs } from '../../data/posts';
+import { usePageMeta } from '../../hooks/usePageMeta';
+import { formatPostDate } from '../../data/posts';
+import { postMeta } from '../../data/seo';
 import { api, imageUrl, type PostDetail } from '../../lib/api';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -20,6 +23,7 @@ export default function BoardDetailPage() {
   const [post, setPost] = useState<PostDetail | null | undefined>(undefined);
 
   useSmoothScroll();
+  usePageMeta(post ? postMeta(post) : null);
 
   useEffect(() => {
     let alive = true;
@@ -42,11 +46,11 @@ export default function BoardDetailPage() {
     const ctx = gsap.context(() => {
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (prefersReduced) {
-        gsap.set('.post-body p, .post-figure', { opacity: 1, y: 0 });
+        gsap.set('.post-body > *, .post-figure', { opacity: 1, y: 0 });
         return;
       }
       gsap.from('.post-detail__title', { y: 40, opacity: 0, duration: 0.9, ease: 'power3.out' });
-      gsap.utils.toArray<HTMLElement>('.post-body p, .post-figure').forEach((el) => {
+      gsap.utils.toArray<HTMLElement>('.post-body > *, .post-figure').forEach((el) => {
         gsap.fromTo(
           el,
           { opacity: 0, y: 32 },
@@ -94,8 +98,6 @@ export default function BoardDetailPage() {
     );
   }
 
-  const paragraphs = splitParagraphs(post.body);
-
   return (
     <div ref={rootRef}>
       <Cursor />
@@ -119,11 +121,7 @@ export default function BoardDetailPage() {
           {post.summary && <p className="post-detail__summary">{post.summary}</p>}
         </header>
 
-        <div className="post-body">
-          {paragraphs.map((paragraph, i) => (
-            <p key={i}>{paragraph}</p>
-          ))}
-        </div>
+        <Markdown source={post.body} className="post-body" />
 
         {post.images.map((img) => (
           <figure className="post-figure" key={img.id}>

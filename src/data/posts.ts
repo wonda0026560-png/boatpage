@@ -13,12 +13,3 @@ export function formatPostDate(date: string) {
   const [y, m, d] = date.split('-');
   return `${y}. ${m}. ${d}`;
 }
-
-/** 본문은 빈 줄로 문단을 나눈 평문이다. 한 줄 개행은 문단 안의 줄바꿈으로 남긴다. */
-export function splitParagraphs(body: string) {
-  return body
-    .replace(/\r\n/g, '\n')
-    .split(/\n\s*\n/)
-    .map((p) => p.trim())
-    .filter(Boolean);
-}

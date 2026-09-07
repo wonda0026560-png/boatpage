@@ -6,7 +6,9 @@ import Cursor from '../../components/layout/Cursor';
 import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import { useSmoothScroll } from '../../hooks/useSmoothScroll';
+import { usePageMeta } from '../../hooks/usePageMeta';
 import { POST_CATEGORIES, formatPostDate } from '../../data/posts';
+import { PAGE_META } from '../../data/seo';
 import { api, type Post } from '../../lib/api';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -21,6 +23,7 @@ export default function BoardPage() {
   const [posts, setPosts] = useState<Post[] | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   useSmoothScroll();
+  usePageMeta(PAGE_META['/board']);
 
   useEffect(() => {
     let alive = true;

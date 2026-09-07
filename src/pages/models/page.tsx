@@ -6,7 +6,9 @@ import Cursor from '../../components/layout/Cursor';
 import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import { useSmoothScroll } from '../../hooks/useSmoothScroll';
+import { usePageMeta } from '../../hooks/usePageMeta';
 import { MODEL_SECTIONS, getModelsByCategory } from '../../data/models';
+import { PAGE_META } from '../../data/seo';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,6 +16,7 @@ export default function ModelsPage() {
   const rootRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   useSmoothScroll();
+  usePageMeta(PAGE_META['/models']);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {

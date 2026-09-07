@@ -8,7 +8,9 @@ import Footer from '../../components/layout/Footer';
 import NavLink from '../../components/layout/NavLink';
 import BoatViewer3D from '../../components/boat/BoatViewer3D';
 import { useSmoothScroll } from '../../hooks/useSmoothScroll';
+import { usePageMeta } from '../../hooks/usePageMeta';
 import { getAdjacentModels, getModelBySlug } from '../../data/models';
+import { modelMeta } from '../../data/seo';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,6 +22,7 @@ export default function ModelDetailPage() {
   const [colorIndex, setColorIndex] = useState(0);
 
   useSmoothScroll();
+  usePageMeta(model ? modelMeta(model) : null);
 
   useLayoutEffect(() => {
     if (!model) return;

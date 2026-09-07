@@ -20,6 +20,16 @@ import crypto from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { pool, initSchema } from './db.js';
+import {
+  loadTemplate,
+  loadRoutes,
+  originFor,
+  renderHead,
+  postMeta,
+  notFoundMeta,
+  sitemapXml,
+  robotsTxt,
+} from './seo.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.resolve(__dirname, '../out');
@@ -387,17 +397,77 @@ app.delete('/api/admin/images/:id', requireAdmin, requireDb, async (req, res, ne
 // 정적 사이트
 // ---------------------------------------------------------------------------
 
+const SITE_ROUTES = loadRoutes(OUT_DIR);
+const ROUTE_META = new Map(SITE_ROUTES.map((r) => [r.path, r]));
+const BOARD_META = ROUTE_META.get('/board') ?? { title: '게시판 | 원다마린산업', description: '' };
+/* 빌드 산출물이 없으면(로컬에서 API 만 띄운 경우) 첫 요청 때 에러가 나는 편이 낫다. */
+let template = null;
+const getTemplate = () => (template ??= loadTemplate(OUT_DIR));
+
+// 검색엔진용. 글은 DB 에 있으므로 정적 파일로 두지 않고 요청 때 만든다.
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain').set('Cache-Control', 'public, max-age=3600').send(robotsTxt(originFor(req)));
+});
+
+app.get('/sitemap.xml', async (req, res, next) => {
+  try {
+    const posts = pool
+      ? (await pool.query('SELECT slug, date, updated_at FROM posts WHERE published ORDER BY date DESC, id DESC')).rows
+      : [];
+    res.type('application/xml').set('Cache-Control', 'public, max-age=3600');
+    res.send(sitemapXml(SITE_ROUTES, posts, originFor(req)));
+  } catch (e) {
+    next(e);
+  }
+});
+
 // 해시가 붙은 빌드 산출물은 내용이 바뀌면 이름도 바뀌므로 1년 캐시
 app.use('/assets', express.static(path.join(OUT_DIR, 'assets'), { immutable: true, maxAge: '1y', fallthrough: false }));
 app.use(express.static(OUT_DIR, { index: false, maxAge: '1h' }));
 
-// 나머지 GET 은 전부 index.html — 라우팅은 클라이언트가 한다
-app.use((req, res, next) => {
+/*
+  나머지 GET 은 전부 index.html — 라우팅은 클라이언트가 한다.
+  다만 <head> 는 경로에 맞게 채워서 준다. 크롤러와 공유 카드는 이것만 보므로
+  여기서 안 하면 모든 페이지가 홈 제목으로 검색된다.
+*/
+app.use(async (req, res, next) => {
   if (req.path.startsWith('/api/')) return res.status(404).json({ error: '없는 API 입니다.' });
   if (req.method !== 'GET' && req.method !== 'HEAD') return next();
-  res.set('Cache-Control', 'no-cache');
-  res.sendFile(path.join(OUT_DIR, 'index.html'));
+  try {
+    const { status, html } = await pageFor(req);
+    res.status(status).set('Cache-Control', 'no-cache').type('html').send(html);
+  } catch (e) {
+    next(e);
+  }
 });
+
+async function pageFor(req) {
+  const origin = originFor(req);
+  const tpl = getTemplate();
+  const p = req.path.replace(/\/+$/, '') || '/';
+
+  const fixed = ROUTE_META.get(p);
+  if (fixed) return { status: 200, html: renderHead(tpl, { origin, path: p, ...fixed }) };
+
+  const post = /^\/board\/([a-z0-9-]+)$/.exec(p);
+  if (post) {
+    // DB 가 없으면 판단할 수 없으니 기본 <head> 그대로 200
+    if (!pool) return { status: 200, html: renderHead(tpl, { origin, path: p, ...BOARD_META }) };
+    const [row] = await selectPosts('WHERE p.published AND p.slug = $1', [post[1]]);
+    if (row) return { status: 200, html: renderHead(tpl, postMeta(row, origin)) };
+    return { status: 404, html: renderHead(tpl, notFoundMeta(origin, p, '글을 찾을 수 없습니다')) };
+  }
+
+  if (p === '/admin' || p.startsWith('/admin/')) {
+    return {
+      status: 200,
+      html: renderHead(tpl, { ...notFoundMeta(origin, p), title: '관리자 | 원다마린산업', description: '' }),
+    };
+  }
+
+  // 모르는 주소는 404 로 — 200 을 주면 검색엔진이 '소프트 404' 로 기록한다
+  return { status: 404, html: renderHead(tpl, notFoundMeta(origin, p)) };
+}
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, _req, res, _next) => {

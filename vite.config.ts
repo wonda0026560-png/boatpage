@@ -1,6 +1,7 @@
-import { defineConfig } from "vite";
+import { defineConfig, runnerImport, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "node:path";
+import { writeFileSync } from "node:fs";
 import AutoImport from "unplugin-auto-import/vite";
 // import { readdyJsxRuntimeProxyPlugin } from "./vite.jsx-runtime-proxy";
 
@@ -25,6 +26,28 @@ function htmlSiteUrlPlugin() {
     },
   };
 }
+
+/*
+  페이지별 검색 제목·설명(src/data/seo.ts)을 out/site-routes.json 으로 내보낸다.
+  서버(server/index.js)는 TS 도, 이미지 import 도 읽지 못하므로 빌드 때
+  vite 의 모듈 러너로 한 번 실행해서 결과만 JSON 으로 남긴다.
+  서버는 이 파일로 sitemap.xml 을 만들고 각 경로의 <head> 를 채운다.
+*/
+function siteRoutesPlugin(): Plugin {
+  return {
+    name: "emit-site-routes",
+    apply: "build",
+    async closeBundle() {
+      const { module } = await runnerImport<typeof import("./src/data/seo")>(
+        resolve(__dirname, "src/data/seo.ts"),
+        { configFile: false, logLevel: "error" }
+      );
+      const routes = module.siteRoutes();
+      writeFileSync(resolve(__dirname, "out/site-routes.json"), JSON.stringify(routes, null, 2));
+      console.log(`[site-routes] ${routes.length} routes → out/site-routes.json`);
+    },
+  };
+}
 //const proxyPlugins = isPreview ? [readdyJsxRuntimeProxyPlugin()] : [];
 // https://vite.dev/config/
 export default defineConfig({
@@ -38,6 +61,7 @@ export default defineConfig({
   plugins: [
     // ...proxyPlugins,
     htmlSiteUrlPlugin(),
+    siteRoutesPlugin(),
     react(),
     AutoImport({
       imports: [

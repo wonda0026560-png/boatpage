@@ -16,7 +16,7 @@ export interface Post {
   title: string;
   category: string;
   summary: string;
-  /** 문단은 빈 줄로 나뉜 평문. 화면에서 splitParagraphs 로 쪼갠다. */
+  /** 마크다운(src/lib/markdown.ts 가 지원하는 범위). 화면에서 <Markdown> 으로 그린다. */
   body: string;
   /** YYYY-MM-DD */
   date: string;

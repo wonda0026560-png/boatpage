@@ -5,6 +5,8 @@ import Cursor from '../../components/layout/Cursor';
 import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
 import NavLink from '../../components/layout/NavLink';
+import { usePageMeta } from '../../hooks/usePageMeta';
+import { PAGE_META } from '../../data/seo';
 import factorySign from '../../assets/site/factory-sign.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -46,6 +48,7 @@ const WLS560_SPECS = [
 
 export default function AboutPage() {
   const rootRef = useRef<HTMLDivElement>(null);
+  usePageMeta(PAGE_META['/about']);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {

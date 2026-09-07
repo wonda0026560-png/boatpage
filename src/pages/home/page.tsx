@@ -10,12 +10,15 @@ import Manifesto from './components/Manifesto';
 import StackedPanels from './components/StackedPanels';
 import Statement from './components/Statement';
 import { useSmoothScroll } from '../../hooks/useSmoothScroll';
+import { usePageMeta } from '../../hooks/usePageMeta';
+import { HOME_META } from '../../data/seo';
 
 export default function Home() {
   const [loaderDone, setLoaderDone] = useState(false);
 
   // 로더가 끝나기 전에는 스크롤을 붙잡지 않는다.
   useSmoothScroll({ enabled: loaderDone });
+  usePageMeta(HOME_META);
 
   return (
     <>
