@@ -45,20 +45,35 @@ export default function StackedPanels() {
       const panels = gsap.utils.toArray<HTMLElement>('.stacked__panel');
       panels.forEach((panel, i) => {
         if (i === panels.length - 1) return;
-        gsap.to(panel, {
-          scale: 0.92,
-          y: -28,
-          filter: 'brightness(0.45)',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: panel,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-            pin: true,
-            pinSpacing: false,
-          },
-        });
+        const dim = panel.querySelector('.stacked__dim');
+
+        /*
+          시작값을 fromTo 로 못박는다.
+
+          예전에는 gsap.to(panel, { filter: 'brightness(0.45)' }) 였는데,
+          패널의 계산된 filter 가 none 이라 GSAP 이 brightness 성분을 찾지 못하고
+          0(완전한 검정)에서 출발시켰다. 핀이 걸리는 순간 화면이 새까매졌다가
+          스크롤할수록 오히려 밝아지는, 의도와 정반대 동작이었다.
+
+          어둡게 하는 일은 filter 대신 검은 레이어의 opacity 로 처리한다.
+          filter 는 매 프레임 전체를 다시 그리지만 opacity 는 합성만 하면 된다.
+        */
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: panel,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: true,
+              pin: true,
+              pinSpacing: false,
+              // 부드러운 스크롤에서 핀이 한 프레임 늦게 걸리며 튀는 것을 막는다
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+            },
+          })
+          .fromTo(panel, { scale: 1, y: 0 }, { scale: 0.92, y: -28, ease: 'none' }, 0)
+          .fromTo(dim, { opacity: 0 }, { opacity: 0.55, ease: 'none' }, 0);
       });
     }, rootRef);
     return () => ctx.revert();
@@ -88,6 +103,8 @@ export default function StackedPanels() {
               </Link>
             </div>
           </div>
+          {/* 뒤로 물러나는 패널을 덮는 어둠. 글자까지 함께 어두워지도록 내용 위에 둔다. */}
+          <div className="stacked__dim" aria-hidden="true" />
         </article>
       ))}
     </section>

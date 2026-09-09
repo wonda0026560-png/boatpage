@@ -848,10 +848,14 @@ img {
 /* ============================================
    STACKED PANELS
    ============================================ */
+/*
+  패널이 작아지며 물러날 때 뒤로 보이는 바닥.
+  밝은 색이면 사진 양옆에 크림색 띠가 생겨 여백처럼 보인다. 어두워야 깊이로 읽힌다.
+*/
 .stacked {
   position: relative;
   width: 100%;
-  background: var(--sand);
+  background: var(--ink);
 }
 
 .stacked__panel {
@@ -861,7 +865,7 @@ img {
   min-height: 620px;
   overflow: hidden;
   transform-origin: center top;
-  will-change: transform, filter;
+  will-change: transform;
 }
 
 .stacked__img {
@@ -871,12 +875,22 @@ img {
   height: 105%;
   object-fit: cover;
   object-position: center;
-  will-change: transform;
-  transition: transform 0.8s cubic-bezier(0.2, 0.6, 0.2, 1);
 }
 
-.stacked__panel:hover .stacked__img {
-  transform: translateY(-20px);
+/*
+  스크롤에 따라 opacity 만 움직인다.
+  예전에는 패널에 filter: brightness() 를 걸었는데, 매 프레임 화면 전체를
+  다시 그려야 하는 데다 시작값(none)에서 brightness 성분을 못 읽어
+  핀이 걸리는 순간 새까매졌다.
+*/
+.stacked__dim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: var(--ink);
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
 }
 
 .stacked__panel-overlay {
