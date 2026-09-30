@@ -13,7 +13,7 @@ const PANELS = [
   {
     num: '01',
     title: 'Moulding',
-    sub: '자체 몰드에 손으로 적층하는 FRP 성형.',
+    sub: '설계를 기반으로 몰드 제작부터 선체 성형까지, 모든 생산 공정을 자체 기술로 직접 완성합니다.',
     image: factoryFront,
     alt: 'FRP 성형이 이루어지는 원다마린산업 공장',
   },
